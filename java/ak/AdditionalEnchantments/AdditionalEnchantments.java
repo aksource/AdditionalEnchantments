@@ -10,7 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import ak.EnchantChanger.Client.renderer.EcRenderMateria;
 
-@Mod(modid="AdditionalEnchantments", name="AdditionalEnchantments", version="1.2",dependencies="required-after:FML", useMetadata = true)
+@Mod(modid="AdditionalEnchantments", name="AdditionalEnchantments", version="@VERSION@",dependencies="required-after:FML", useMetadata = true)
 //@NetworkMod(clientSideRequired=true, serverSideRequired=false)
 
 public class AdditionalEnchantments
