@@ -1,6 +1,15 @@
 package ak.AdditionalEnchantments;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+
+import javax.swing.text.html.parser.Entity;
 
 public class EnchantmentWaterAspect extends EnchantmentDamagable
 {
@@ -8,8 +17,15 @@ public class EnchantmentWaterAspect extends EnchantmentDamagable
 	{
 		super(id, weight);
 	}
-	public float calcModifierLiving(int lv, EntityLivingBase living)
-	{
-		return (living.isImmuneToFire())?2.5F:0.0F;
-	}
+
+    @SubscribeEvent
+    public void onLivingHurt(LivingHurtEvent event) {
+        EntityLivingBase entityLivingBase = event.entityLiving;
+        if (entityLivingBase.isImmuneToFire() && event.source.damageType.equals("player")) {
+            ItemStack itemStack = ((EntityPlayer)event.source.getEntity()).getCurrentEquippedItem();
+            if (itemStack != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.waterAspect.effectId, itemStack) > 0) {
+                event.ammount += EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.waterAspect.effectId, itemStack) * 2.5F;
+            }
+        }
+    }
 }

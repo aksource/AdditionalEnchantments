@@ -64,10 +64,12 @@ public class AdditionalEnchantments
 		if(addDisjunction)
 		{
 			disjunction = new EnchantmentDisjunction(idDisjunction, 5).setName("disjunction");
+            MinecraftForge.EVENT_BUS.register(disjunction);
 		}
 		if(addWaterAspect)
 		{
 			waterAspect = new EnchantmentWaterAspect(idWaterAspect, 5).setName("wateraspect");
+            MinecraftForge.EVENT_BUS.register(waterAspect);
 		}
 		if(addMagicProtection)
 		{
