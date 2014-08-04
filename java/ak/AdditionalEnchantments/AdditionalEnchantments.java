@@ -1,5 +1,6 @@
 package ak.AdditionalEnchantments;
 
+import ak.EnchantChanger.Client.renderer.EcRenderMateria;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -8,7 +9,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import ak.EnchantChanger.Client.renderer.EcRenderMateria;
 
 @Mod(modid="AdditionalEnchantments", name="AdditionalEnchantments", version="@VERSION@",dependencies="required-after:FML", useMetadata = true)
 //@NetworkMod(clientSideRequired=true, serverSideRequired=false)
