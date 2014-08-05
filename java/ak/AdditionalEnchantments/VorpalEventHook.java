@@ -1,8 +1,6 @@
 package ak.AdditionalEnchantments;
 
-import java.util.ArrayList;
-import java.util.Random;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -16,7 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class VorpalEventHook
 {
