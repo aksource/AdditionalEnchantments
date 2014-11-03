@@ -1,12 +1,11 @@
 package ak.AdditionalEnchantments;
 
-import ak.EnchantChanger.Client.renderer.EcRenderMateria;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -80,16 +79,30 @@ public class AdditionalEnchantments
 			voidJump = new EnchantmentVoidJump(idVoidJump, 1).setName("voidjump");
 			MinecraftForge.EVENT_BUS.register(new VoidJumpEventHook());
 		}
+        sendIMCMessageForEC(idDisjunction, 13);
+        sendIMCMessageForEC(idMagicProtection, 8);
+        sendIMCMessageForEC(idWaterAspect, 13);
+        sendIMCMessageForEC(idVorpal, 13);
+        sendIMCMessageForEC(idVoidJump, 14);
+
 	}
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		if(event.getSide().isClient() && Loader.isModLoaded("EnchantChanger")) {
-			EcRenderMateria.registerExtraMateria(idDisjunction, 13);
-			EcRenderMateria.registerExtraMateria(idMagicProtection, 8);
-			EcRenderMateria.registerExtraMateria(idWaterAspect, 13);
-			EcRenderMateria.registerExtraMateria(idVorpal, 13);
-			EcRenderMateria.registerExtraMateria(idVoidJump, 14);
-		}
-	}
+
+    private void sendIMCMessageForEC(int enchantId, int texId) {
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        nbtTagCompound.setInteger("enchantId", enchantId);
+        nbtTagCompound.setInteger("materiaTexId", texId);
+        FMLInterModComms.sendMessage("EnchantChanger", "registerExtraMateria", nbtTagCompound);
+    }
+
+//	@Mod.EventHandler
+//	public void postInit(FMLPostInitializationEvent event)
+//	{
+//		if(event.getSide().isClient() && Loader.isModLoaded("EnchantChanger")) {
+//			EcRenderMateria.registerExtraMateria(idDisjunction, 13);
+//			EcRenderMateria.registerExtraMateria(idMagicProtection, 8);
+//			EcRenderMateria.registerExtraMateria(idWaterAspect, 13);
+//			EcRenderMateria.registerExtraMateria(idVorpal, 13);
+//			EcRenderMateria.registerExtraMateria(idVoidJump, 14);
+//		}
+//	}
 }

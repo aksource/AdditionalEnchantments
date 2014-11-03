@@ -11,9 +11,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,30 +22,51 @@ public class VorpalEventHook
 {
 	private boolean vorpaled = false;
 	private Random rand = new Random();
-	@SubscribeEvent
-	public void vorpalAttackEvent(AttackEntityEvent event)
-	{	
-		ItemStack equipItem = event.entityPlayer.getCurrentEquippedItem();
-		int vorpalLv;
-		vorpaled = false;
-		if(AdditionalEnchantments.addVorpal && event.target instanceof EntityLivingBase &&equipItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem) > 0){
-			vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem);
-			EntityLivingBase entityliving = (EntityLivingBase) event.target;
-			if(vorpalLv * 10 > rand.nextInt(100)){
-				vorpaled = true;
-				entityliving.attackEntityFrom(DamageSource.causePlayerDamage(event.entityPlayer), 9999999F);
-			}
-		}
-	}
+
+    @SubscribeEvent
+    public void vorpalHurtEvent(LivingHurtEvent event) {
+        if (!AdditionalEnchantments.addVorpal) return;
+        if (event.source.getEntity() instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityLivingBase) {
+            EntityLivingBase attacker = (EntityLivingBase)event.source.getEntity();
+            ItemStack heldItem = attacker.getHeldItem();
+            if (heldItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, heldItem) > 0) {
+                EntityLivingBase target = event.entityLiving;
+                int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, heldItem);
+                float targetHpRatio = target.getHealth() / target.getMaxHealth();
+                int range = MathHelper.ceiling_float_int(10000 * targetHpRatio);
+                if(vorpalLv * 100 > rand.nextInt(range)) {
+                    vorpaled = true;
+                    event.ammount = 9999999F;
+                }
+            }
+        }
+    }
+
+//	@SubscribeEvent
+//	public void vorpalAttackEvent(AttackEntityEvent event)
+//	{
+//		ItemStack equipItem = event.entityPlayer.getCurrentEquippedItem();
+//		int vorpalLv;
+//		vorpaled = false;
+//		if(AdditionalEnchantments.addVorpal && event.target instanceof EntityLivingBase &&equipItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem) > 0){
+//			vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem);
+//			EntityLivingBase target = (EntityLivingBase) event.target;
+//			if(vorpalLv * 10 > rand.nextInt(100)){
+//				vorpaled = true;
+//				target.attackEntityFrom(DamageSource.causePlayerDamage(event.entityPlayer), 9999999F);
+//			}
+//		}
+//	}
+
 	@SubscribeEvent
 	public void entityDropEvent(LivingDropsEvent event)
 	{
-		if(AdditionalEnchantments.addVorpal && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer)
+		if(AdditionalEnchantments.addVorpal && event.source.getEntity() != null && event.source.getEntity() instanceof EntityLivingBase)
 		{
-			EntityPlayer player = (EntityPlayer) event.source.getEntity();
-			ItemStack equipItem = player.getCurrentEquippedItem();
+            EntityLivingBase attacker = (EntityLivingBase) event.source.getEntity();
+			ItemStack equipItem = attacker.getHeldItem();
 			int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem);
-			if((vorpaled|| vorpalLv * 20 > rand.nextInt(100)) && !skullInDrops(event.drops)){
+			if((vorpaled || vorpalLv * 10 > rand.nextInt(100)) && !skullInDrops(event.drops)){
 				int skullmeta = skullKind(event.entityLiving);
 				if(skullmeta >= 0){
 					ItemStack skull = new ItemStack(Items.skull, 1, skullmeta);
@@ -57,28 +78,27 @@ public class VorpalEventHook
 			}
 		}
 	}
-	private int skullKind(EntityLivingBase living)
-	{
+	private int skullKind(EntityLivingBase living) {
 		if(living instanceof EntitySkeleton){
 			if(((EntitySkeleton)living).getSkeletonType() == 0)
 				return 0;
 			else
 				return 1;
-		}else if(living instanceof EntityPlayer){
-			return 3;
-		}else if(living instanceof EntityZombie){
-			return 2;
-		}else if(living instanceof EntityCreeper){
-			return 4;
-		}else{
-			return -1;
 		}
+        if(living instanceof EntityPlayer){
+			return 3;
+		}
+        if(living instanceof EntityZombie){
+			return 2;
+		}
+        if(living instanceof EntityCreeper){
+			return 4;
+		}
+        return -1;
 	}
-	private boolean skullInDrops(ArrayList<EntityItem> droplist)
-	{
-		for(int i=0;i<droplist.size();i++)
-		{
-			if(droplist.get(i).getEntityItem().getItem() instanceof ItemSkull)
+	private boolean skullInDrops(ArrayList<EntityItem> droplist) {
+		for(EntityItem entityItem : droplist) {
+			if(entityItem.getEntityItem().getItem() instanceof ItemSkull)
 				return true;
 		}
 		return false;
