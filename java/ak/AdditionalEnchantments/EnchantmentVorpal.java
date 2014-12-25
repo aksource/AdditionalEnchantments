@@ -2,12 +2,13 @@ package ak.AdditionalEnchantments;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentVorpal extends Enchantment
 {
 	public EnchantmentVorpal(int id, int weight)
 	{
-		super(id, weight, EnumEnchantmentType.weapon);
+		super(id, new ResourceLocation(AdditionalEnchantments.MOD_ID + ":" + "vorpal"), weight, EnumEnchantmentType.WEAPON);
 	}
 	public int getMaxLevel()
 	{

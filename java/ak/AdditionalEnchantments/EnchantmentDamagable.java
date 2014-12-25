@@ -3,12 +3,13 @@ package ak.AdditionalEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentDamage;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentDamagable extends Enchantment
 {
-	public EnchantmentDamagable(int id, int weight)
+	public EnchantmentDamagable(int id, String uniqueName, int weight)
 	{
-		super(id,weight, EnumEnchantmentType.weapon);
+		super(id, new ResourceLocation(AdditionalEnchantments.MOD_ID + ":" + uniqueName), weight, EnumEnchantmentType.WEAPON);
 	}
 	public int getMaxLevel()
 	{
@@ -24,6 +25,6 @@ public class EnchantmentDamagable extends Enchantment
 	}
 	public boolean canApplyTogether(Enchantment enchantment)
 	{
-		return !(enchantment instanceof EnchantmentDamage) || !(enchantment instanceof EnchantmentDamagable);
+		return !(enchantment instanceof EnchantmentDamage) && !(enchantment instanceof EnchantmentDamagable);
 	}
 }

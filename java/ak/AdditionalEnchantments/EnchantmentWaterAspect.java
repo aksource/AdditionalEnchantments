@@ -1,6 +1,6 @@
 package ak.AdditionalEnchantments;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +11,7 @@ public class EnchantmentWaterAspect extends EnchantmentDamagable
 {
 	public EnchantmentWaterAspect(int id, int weight)
 	{
-		super(id, weight);
+		super(id, "water_aspect", weight);
 	}
 
     @SubscribeEvent

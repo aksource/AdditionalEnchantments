@@ -1,6 +1,5 @@
 package ak.AdditionalEnchantments;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -14,8 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class VorpalEventHook
@@ -96,7 +96,7 @@ public class VorpalEventHook
 		}
         return -1;
 	}
-	private boolean skullInDrops(ArrayList<EntityItem> droplist) {
+	private boolean skullInDrops(List<EntityItem> droplist) {
 		for(EntityItem entityItem : droplist) {
 			if(entityItem.getEntityItem().getItem() instanceof ItemSkull)
 				return true;

@@ -1,7 +1,5 @@
 package ak.AdditionalEnchantments;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,14 +11,17 @@ import net.minecraft.network.play.server.S1DPacketEntityEffect;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.Iterator;
+import java.util.Collection;
 
 public class VoidJumpEventHook
 {
@@ -49,22 +50,22 @@ public class VoidJumpEventHook
 	}
 	public void jumpToHome(EntityLivingBase entity)
 	{
-		ChunkCoordinates positions;
+        BlockPos positions;
 		World world = entity.worldObj;
 		if(entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer) entity;
-			int dim = world.provider.dimensionId;
+			int dim = world.provider.getDimensionId();
 			if(player.getBedLocation(dim) == null){
 				tranferToDimension(0, entity);
 			}else{
 				positions = player.getBedLocation(dim);
-				player.setPositionAndUpdate(positions.posX, positions.posY, positions.posZ);
+				player.setPositionAndUpdate(positions.getX(), positions.getY(), positions.getZ());
 			}
 			this.spawnPortalParticle(player, world);
 		}else if(entity instanceof EntityCreature){
 			EntityCreature living = (EntityCreature) entity;
-			positions = living.getHomePosition();
-			living.setPositionAndUpdate(positions.posX, positions.posY, positions.posZ);
+			positions = living.func_180486_cf();
+			living.setPositionAndUpdate(positions.getX(), positions.getY(), positions.getZ());
 		}
 	}
 	public void tranferToDimension(int dim, EntityLivingBase entity)
@@ -72,18 +73,20 @@ public class VoidJumpEventHook
 		if(entity instanceof EntityPlayerMP){
 			EntityPlayerMP playerMP = (EntityPlayerMP) entity;
 			WorldServer worldserver1 = MinecraftServer.getServer().worldServerForDimension(dim);
-			ChunkCoordinates chunk = worldserver1.getSpawnPoint();
-			playerMP.setPositionAndUpdate(chunk.posX, chunk.posY, chunk.posZ);
+            BlockPos blockPos = worldserver1.getSpawnPoint();
+			playerMP.setPositionAndUpdate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 			transferPlayerToDimension(playerMP. mcServer.getConfigurationManager(), playerMP, dim, new VoidJumpTeleporter(playerMP.mcServer.worldServerForDimension(dim)));
 		}
 	}
+
+    @SuppressWarnings("unchecked")
 	public static void transferPlayerToDimension(ServerConfigurationManager serverConf, EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter)
 	{
 		int j = par1EntityPlayerMP.dimension;
 		WorldServer worldserver = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
 		par1EntityPlayerMP.dimension = par2;
 		WorldServer worldserver1 = MinecraftServer.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-		par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.difficultySetting, worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
+		par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
 		par1EntityPlayerMP.isDead = false;
 		serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
@@ -92,20 +95,16 @@ public class VoidJumpEventHook
 		par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
 		serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
 		serverConf.syncPlayerInventory(par1EntityPlayerMP);
-		Iterator iterator = par1EntityPlayerMP.getActivePotionEffects().iterator();
-
-		while (iterator.hasNext())
-		{
-			PotionEffect potioneffect = (PotionEffect)iterator.next();
-			par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potioneffect));
-		}
+        for (PotionEffect potionEffect : (Collection<PotionEffect>)par1EntityPlayerMP.getActivePotionEffects()) {
+            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potionEffect));
+        }
 
 		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);
 	}
 	private void spawnPortalParticle(EntityLivingBase entity, World world)
 	{
 		for (int var2 = 0; var2 < 32; ++var2){
-			world.spawnParticle("portal", entity.posX, entity.posY + world.rand.nextDouble() * 2.0D, entity.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
+			world.spawnParticle(EnumParticleTypes.PORTAL, entity.posX, entity.posY + world.rand.nextDouble() * 2.0D, entity.posZ, world.rand.nextGaussian(), 0.0D, world.rand.nextGaussian());
 		}
 	}
 }

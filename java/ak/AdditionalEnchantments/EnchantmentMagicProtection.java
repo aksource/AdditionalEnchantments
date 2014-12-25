@@ -7,7 +7,7 @@ public class EnchantmentMagicProtection extends EnchantmentProtectionAdditional
 {
 	public EnchantmentMagicProtection(int id, int weight)
 	{
-		super(id, weight);
+		super(id, "magic_protection", weight);
 	}
 	@Override
 	public int calcModifierDamage(int par1, DamageSource dmgSource)

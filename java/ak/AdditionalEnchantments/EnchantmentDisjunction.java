@@ -1,6 +1,6 @@
 package ak.AdditionalEnchantments;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -12,7 +12,7 @@ public class EnchantmentDisjunction extends EnchantmentDamagable
 {
 	public EnchantmentDisjunction(int id, int weight)
 	{
-		super(id,weight);
+		super(id, "disjunction", weight);
 	}
 
     @SubscribeEvent

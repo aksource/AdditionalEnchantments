@@ -1,19 +1,18 @@
 package ak.AdditionalEnchantments;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 @Mod(modid="AdditionalEnchantments", name="AdditionalEnchantments", version="@VERSION@",dependencies="required-after:FML", useMetadata = true)
-//@NetworkMod(clientSideRequired=true, serverSideRequired=false)
-
 public class AdditionalEnchantments
 {
+    public static final String MOD_ID = "AdditionalEnchantments";
 	@Mod.Instance("AdditionalEnchantments")
 	public static AdditionalEnchantments instance;
 //	@SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
@@ -93,16 +92,4 @@ public class AdditionalEnchantments
         nbtTagCompound.setInteger("materiaTexId", texId);
         FMLInterModComms.sendMessage("EnchantChanger", "registerExtraMateria", nbtTagCompound);
     }
-
-//	@Mod.EventHandler
-//	public void postInit(FMLPostInitializationEvent event)
-//	{
-//		if(event.getSide().isClient() && Loader.isModLoaded("EnchantChanger")) {
-//			EcRenderMateria.registerExtraMateria(idDisjunction, 13);
-//			EcRenderMateria.registerExtraMateria(idMagicProtection, 8);
-//			EcRenderMateria.registerExtraMateria(idWaterAspect, 13);
-//			EcRenderMateria.registerExtraMateria(idVorpal, 13);
-//			EcRenderMateria.registerExtraMateria(idVoidJump, 14);
-//		}
-//	}
 }
