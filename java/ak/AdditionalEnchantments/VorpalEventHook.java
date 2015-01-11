@@ -3,6 +3,7 @@ package ak.AdditionalEnchantments;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -26,7 +27,7 @@ public class VorpalEventHook
     @SubscribeEvent
     public void vorpalHurtEvent(LivingHurtEvent event) {
         if (!AdditionalEnchantments.addVorpal) return;
-        if (event.source.getEntity() instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityLivingBase) {
+        if (!(event.entityLiving instanceof IBossDisplayData) && event.source.getEntity() instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityLivingBase) {
             EntityLivingBase attacker = (EntityLivingBase)event.source.getEntity();
             ItemStack heldItem = attacker.getHeldItem();
             if (heldItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, heldItem) > 0) {
