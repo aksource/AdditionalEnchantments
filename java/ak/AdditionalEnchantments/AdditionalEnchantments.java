@@ -54,10 +54,12 @@ public class AdditionalEnchantments {
     public void load(FMLInitializationEvent event) {
         if (addVorpal) {
             vorpal = new EnchantmentVorpal(idVorpal, 2).setName("vorpal");
+            Enchantment.addToBookList(vorpal);
             MinecraftForge.EVENT_BUS.register(new VorpalEventHook());
         }
         if (addDisjunction) {
             disjunction = new EnchantmentDisjunction(idDisjunction, 5).setName("disjunction");
+            Enchantment.addToBookList(disjunction);
             MinecraftForge.EVENT_BUS.register(disjunction);
         }
         if (addWaterAspect) {
@@ -66,9 +68,11 @@ public class AdditionalEnchantments {
         }
         if (addMagicProtection) {
             magicProtection = new EnchantmentMagicProtection(idMagicProtection, 5).setName("magicprotection");
+            Enchantment.addToBookList(magicProtection);
         }
         if (addVoidJump) {
             voidJump = new EnchantmentVoidJump(idVoidJump, 1).setName("voidjump");
+            Enchantment.addToBookList(voidJump);
             MinecraftForge.EVENT_BUS.register(new VoidJumpEventHook());
         }
         sendIMCMessageForEC(idDisjunction, 13);
