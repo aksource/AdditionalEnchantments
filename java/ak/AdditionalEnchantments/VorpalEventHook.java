@@ -19,23 +19,22 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class VorpalEventHook
-{
-	private boolean vorpaled = false;
-	private Random rand = new Random();
+public class VorpalEventHook {
+    private boolean vorpaled = false;
+    private Random rand = new Random();
 
     @SubscribeEvent
     public void vorpalHurtEvent(LivingHurtEvent event) {
         if (!AdditionalEnchantments.addVorpal) return;
         if (!(event.entityLiving instanceof IBossDisplayData) && event.source.getEntity() instanceof EntityLivingBase && event.source.getSourceOfDamage() instanceof EntityLivingBase) {
-            EntityLivingBase attacker = (EntityLivingBase)event.source.getEntity();
+            EntityLivingBase attacker = (EntityLivingBase) event.source.getEntity();
             ItemStack heldItem = attacker.getHeldItem();
             if (heldItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, heldItem) > 0) {
                 EntityLivingBase target = event.entityLiving;
                 int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, heldItem);
                 float targetHpRatio = target.getHealth() / target.getMaxHealth();
                 int range = MathHelper.ceiling_float_int(10000 * targetHpRatio);
-                if(vorpalLv * 100 > rand.nextInt(range)) {
+                if (vorpalLv * 100 > rand.nextInt(range)) {
                     vorpaled = true;
                     event.ammount = 9999999F;
                 }
@@ -59,49 +58,49 @@ public class VorpalEventHook
 //		}
 //	}
 
-	@SubscribeEvent
-	public void entityDropEvent(LivingDropsEvent event)
-	{
-		if(AdditionalEnchantments.addVorpal && event.source.getEntity() != null && event.source.getEntity() instanceof EntityLivingBase)
-		{
+    @SubscribeEvent
+    public void entityDropEvent(LivingDropsEvent event) {
+        if (AdditionalEnchantments.addVorpal && event.source.getEntity() != null && event.source.getEntity() instanceof EntityLivingBase) {
             EntityLivingBase attacker = (EntityLivingBase) event.source.getEntity();
-			ItemStack equipItem = attacker.getHeldItem();
-			int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem);
-			if((vorpaled || vorpalLv * 10 > rand.nextInt(100)) && !skullInDrops(event.drops)){
-				int skullmeta = skullKind(event.entityLiving);
-				if(skullmeta >= 0){
-					ItemStack skull = new ItemStack(Items.skull, 1, skullmeta);
-					EntityItem entityitem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ);
-					entityitem.setEntityItemStack(skull);
-					event.drops.add(entityitem);
-					vorpaled = false;
-				}
-			}
-		}
-	}
-	private int skullKind(EntityLivingBase living) {
-		if(living instanceof EntitySkeleton){
-			if(((EntitySkeleton)living).getSkeletonType() == 0)
-				return 0;
-			else
-				return 1;
-		}
-        if(living instanceof EntityPlayer){
-			return 3;
-		}
-        if(living instanceof EntityZombie){
-			return 2;
-		}
-        if(living instanceof EntityCreeper){
-			return 4;
-		}
+            ItemStack equipItem = attacker.getHeldItem();
+            int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem);
+            if ((vorpaled || vorpalLv * 10 > rand.nextInt(100)) && !skullInDrops(event.drops)) {
+                int skullmeta = skullKind(event.entityLiving);
+                if (skullmeta >= 0) {
+                    ItemStack skull = new ItemStack(Items.skull, 1, skullmeta);
+                    EntityItem entityitem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ);
+                    entityitem.setEntityItemStack(skull);
+                    event.drops.add(entityitem);
+                    vorpaled = false;
+                }
+            }
+        }
+    }
+
+    private int skullKind(EntityLivingBase living) {
+        if (living instanceof EntitySkeleton) {
+            if (((EntitySkeleton) living).getSkeletonType() == 0)
+                return 0;
+            else
+                return 1;
+        }
+        if (living instanceof EntityPlayer) {
+            return 3;
+        }
+        if (living instanceof EntityZombie) {
+            return 2;
+        }
+        if (living instanceof EntityCreeper) {
+            return 4;
+        }
         return -1;
-	}
-	private boolean skullInDrops(ArrayList<EntityItem> droplist) {
-		for(EntityItem entityItem : droplist) {
-			if(entityItem.getEntityItem().getItem() instanceof ItemSkull)
-				return true;
-		}
-		return false;
-	}
+    }
+
+    private boolean skullInDrops(ArrayList<EntityItem> droplist) {
+        for (EntityItem entityItem : droplist) {
+            if (entityItem.getEntityItem().getItem() instanceof ItemSkull)
+                return true;
+        }
+        return false;
+    }
 }
