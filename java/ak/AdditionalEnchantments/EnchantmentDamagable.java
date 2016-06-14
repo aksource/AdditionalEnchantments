@@ -22,6 +22,6 @@ public class EnchantmentDamagable extends Enchantment {
     }
 
     public boolean canApplyTogether(Enchantment enchantment) {
-        return !(enchantment instanceof EnchantmentDamage) || !(enchantment instanceof EnchantmentDamagable);
+        return !(enchantment instanceof EnchantmentDamage) && !(enchantment instanceof EnchantmentDamagable);
     }
 }

@@ -34,7 +34,7 @@ public class VorpalEventHook {
                 int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, heldItem);
                 float targetHpRatio = target.getHealth() / target.getMaxHealth();
                 int range = MathHelper.ceiling_float_int(10000 * targetHpRatio);
-                if (vorpalLv * 100 > rand.nextInt(range)) {
+                if (range > 0 && vorpalLv * 100 > rand.nextInt(range)) {
                     vorpaled = true;
                     event.ammount = 9999999F;
                 }
