@@ -62,7 +62,7 @@ public class VoidJumpEventHook {
             this.spawnPortalParticle(player, world);
         } else if (entity instanceof EntityCreature) {
             EntityCreature living = (EntityCreature) entity;
-            positions = living.func_180486_cf();
+            positions = living.getHomePosition();
             living.setPositionAndUpdate(positions.getX(), positions.getY(), positions.getZ());
         }
     }
@@ -87,7 +87,7 @@ public class VoidJumpEventHook {
         worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
         par1EntityPlayerMP.isDead = false;
         serverConf.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
-        serverConf.func_72375_a(par1EntityPlayerMP, worldserver);
+        serverConf.preparePlayer(par1EntityPlayerMP, worldserver);
         par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
         par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
         serverConf.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);

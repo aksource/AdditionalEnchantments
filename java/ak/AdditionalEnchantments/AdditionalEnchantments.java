@@ -9,11 +9,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
-@Mod(modid = "AdditionalEnchantments", name = "AdditionalEnchantments", version = "@VERSION@", dependencies = "required-after:FML", useMetadata = true)
+@Mod(modid = AdditionalEnchantments.MOD_ID,
+        name = AdditionalEnchantments.MOD_NAME,
+        version = AdditionalEnchantments.MOD_VERSION,
+        dependencies = AdditionalEnchantments.MOD_DEPENDENCIES,
+        useMetadata = true,
+        acceptedMinecraftVersions = AdditionalEnchantments.MOD_MC_VERSION)
 public class AdditionalEnchantments {
     public static final String MOD_ID = "AdditionalEnchantments";
-    @Mod.Instance("AdditionalEnchantments")
-    public static AdditionalEnchantments instance;
+    public static final String MOD_NAME = "AdditionalEnchantments";
+    public static final String MOD_VERSION = "@VERSION@";
+    public static final String MOD_DEPENDENCIES = "required-after:Forge@[11.14.0.1237,)";
+    public static final String MOD_MC_VERSION = "[1.8,1.8.9]";
+
 //	@SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
 //	public static CommonProxy proxy;
 
