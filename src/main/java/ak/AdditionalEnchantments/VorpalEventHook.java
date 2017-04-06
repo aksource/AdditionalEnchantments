@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -26,14 +27,14 @@ public class VorpalEventHook {
     @SubscribeEvent
     public void vorpalHurtEvent(LivingHurtEvent event) {
         if (!AdditionalEnchantments.addVorpal) return;
-        if (!event.getEntityLiving().isNonBoss() && event.getSource().getEntity() instanceof EntityLivingBase && event.getSource().getSourceOfDamage() instanceof EntityLivingBase) {
+        if (event.getEntityLiving().isNonBoss() && event.getSource().getEntity() instanceof EntityLivingBase && event.getSource().getSourceOfDamage() instanceof EntityLivingBase) {
             EntityLivingBase attacker = (EntityLivingBase) event.getSource().getEntity();
             ItemStack heldItem = attacker.getHeldItem(EnumHand.MAIN_HAND);
-            if (heldItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.vorpal, heldItem) > 0) {
+            if (!heldItem.isEmpty() && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.vorpal, heldItem) > 0) {
                 EntityLivingBase target = event.getEntityLiving();
                 int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.vorpal, heldItem);
                 float targetHpRatio = target.getHealth() / target.getMaxHealth();
-                int range = MathHelper.ceiling_float_int(10000 * targetHpRatio);
+                int range = MathHelper.ceil(10000 * targetHpRatio);
                 if (range > 0 && vorpalLv * 100 > rand.nextInt(range)) {
                     vorpaled = true;
                     event.setAmount(9999999F);
@@ -41,22 +42,6 @@ public class VorpalEventHook {
             }
         }
     }
-
-//	@SubscribeEvent
-//	public void vorpalAttackEvent(AttackEntityEvent event)
-//	{
-//		ItemStack equipItem = event.entityPlayer.getCurrentEquippedItem();
-//		int vorpalLv;
-//		vorpaled = false;
-//		if(AdditionalEnchantments.addVorpal && event.target instanceof EntityLivingBase &&equipItem != null && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem) > 0){
-//			vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.idVorpal, equipItem);
-//			EntityLivingBase target = (EntityLivingBase) event.target;
-//			if(vorpalLv * 10 > rand.nextInt(100)){
-//				vorpaled = true;
-//				target.attackEntityFrom(DamageSource.causePlayerDamage(event.entityPlayer), 9999999F);
-//			}
-//		}
-//	}
 
     @SubscribeEvent
     public void entityDropEvent(LivingDropsEvent event) {
@@ -68,7 +53,7 @@ public class VorpalEventHook {
                 int skullmeta = skullKind(event.getEntityLiving());
                 if (skullmeta >= 0) {
                     ItemStack skull = new ItemStack(Items.SKULL, 1, skullmeta);
-                    EntityItem entityitem = new EntityItem(event.getEntityLiving().worldObj, event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ);
+                    EntityItem entityitem = new EntityItem(event.getEntityLiving().getEntityWorld(), event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ);
                     entityitem.setEntityItemStack(skull);
                     event.getDrops().add(entityitem);
                     vorpaled = false;
@@ -79,10 +64,10 @@ public class VorpalEventHook {
 
     private int skullKind(EntityLivingBase living) {
         if (living instanceof EntitySkeleton) {
-            if (((EntitySkeleton) living).getSkeletonType() == 0)
-                return 0;
-            else
-                return 1;
+            return 0;
+        }
+        if (living instanceof EntityWitherSkeleton) {
+            return 1;
         }
         if (living instanceof EntityPlayer) {
             return 3;

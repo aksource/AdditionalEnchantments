@@ -13,10 +13,10 @@ public class VoidJumpTeleporter extends Teleporter {
 	}
 
 	@Override
-	public void placeInPortal(Entity par1Entity, float par8) {
-		par1Entity.motionX = par1Entity.motionY = par1Entity.motionZ = 0.0D;
-		BlockPos blockPos = par1Entity.worldObj.getTopSolidOrLiquidBlock(new BlockPos(par1Entity.posX, par1Entity.posY, par1Entity.posZ));
-		par1Entity.moveToBlockPosAndAngles(blockPos, 0, 0);
-		par1Entity.fallDistance = 0;
+	public void placeInPortal(Entity entityIn, float rotationYaw) {
+		entityIn.motionX = entityIn.motionY = entityIn.motionZ = 0.0D;
+		BlockPos blockPos = entityIn.getEntityWorld().getTopSolidOrLiquidBlock(new BlockPos(entityIn.posX, entityIn.posY, entityIn.posZ));
+		entityIn.moveToBlockPosAndAngles(blockPos, 0, 0);
+		entityIn.fallDistance = 0;
 	}
 }

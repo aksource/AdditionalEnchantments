@@ -1,15 +1,15 @@
-package ak.AdditionalEnchantments;
+package ak.AdditionalEnchantments.Enchantment;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentDamage;
+import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.util.ResourceLocation;
 
 import static ak.AdditionalEnchantments.AdditionalEnchantments.SLOTS_MAIN_HAND;
 
-public class EnchantmentDamagable extends Enchantment {
-    public EnchantmentDamagable(int id, ResourceLocation resourceLocation, Rarity rarity) {
-        super(rarity, EnumEnchantmentType.WEAPON, SLOTS_MAIN_HAND);
+public class EnchantmentProtectionAdditional extends Enchantment {
+    public EnchantmentProtectionAdditional(int id, ResourceLocation resourceLocation, Rarity rarity) {
+        super(rarity, EnumEnchantmentType.ARMOR, SLOTS_MAIN_HAND);
         Enchantment.REGISTRY.register(id, resourceLocation, this);
     }
 
@@ -22,10 +22,10 @@ public class EnchantmentDamagable extends Enchantment {
     }
 
     public int getMaxEnchantability(int par1) {
-        return this.getMinEnchantability(par1) + 20;
+        return this.getMinEnchantability(par1) + 15;
     }
 
     public boolean canApplyTogether(Enchantment enchantment) {
-        return !(enchantment instanceof EnchantmentDamage) && !(enchantment instanceof EnchantmentDamagable);
+        return !(enchantment instanceof EnchantmentProtection) && !(enchantment instanceof EnchantmentProtectionAdditional);
     }
 }

@@ -1,5 +1,7 @@
-package ak.AdditionalEnchantments;
+package ak.AdditionalEnchantments.Enchantment;
 
+import ak.AdditionalEnchantments.AdditionalEnchantments;
+import ak.AdditionalEnchantments.Constants;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
@@ -8,7 +10,7 @@ import static ak.AdditionalEnchantments.AdditionalEnchantments.SLOTS_PROTECTS;
 public class EnchantmentVoidJump extends Enchantment {
     public EnchantmentVoidJump(int id, Rarity rarity) {
         super(rarity, EnumEnchantmentType.ARMOR_FEET, SLOTS_PROTECTS);
-        Enchantment.REGISTRY.register(id, AdditionalEnchantments.getResourceLocation(AdditionalEnchantments.NAME_VOID_JUMP), this);
+        Enchantment.REGISTRY.register(id, AdditionalEnchantments.getResourceLocation(Constants.NAME_VOID_JUMP), this);
     }
 
     public int getMinEnchantability(int par1) {

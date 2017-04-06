@@ -27,9 +27,9 @@ public class VoidJumpEventHook {
                 break;
             }
         }
-        if (event.getSource() == DamageSource.outOfWorld && voidJumpEnchanted) {
+        if (event.getSource() == DamageSource.OUT_OF_WORLD && voidJumpEnchanted) {
             entity.motionX = entity.motionY = entity.motionZ = 0;
-            if (!event.getEntityLiving().worldObj.isRemote)
+            if (!event.getEntityLiving().getEntityWorld().isRemote)
                 jumpToHome(entity);
             entity.fallDistance = 0;
             event.setCanceled(true);
@@ -38,12 +38,12 @@ public class VoidJumpEventHook {
 
     public void jumpToHome(EntityLivingBase entity) {
         BlockPos positions;
-        World world = entity.worldObj;
+        World world = entity.getEntityWorld();
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             int dim = world.provider.getDimension();
             if (player.getBedLocation(dim) == null) {
-                tranferToDimension(0, entity);
+                transferToDimension(0, entity);
             } else {
                 positions = player.getBedLocation(dim);
                 player.setPositionAndUpdate(positions.getX(), positions.getY(), positions.getZ());
@@ -56,39 +56,16 @@ public class VoidJumpEventHook {
         }
     }
 
-    public void tranferToDimension(int dim, EntityLivingBase entity) {
-        if (entity instanceof EntityPlayerMP) {
+    public void transferToDimension(int dim, EntityLivingBase entity) {
+        if (entity instanceof EntityPlayerMP && entity.getServer() != null) {
             EntityPlayerMP playerMP = (EntityPlayerMP) entity;
-            WorldServer worldserver1 = playerMP.getServer().worldServerForDimension(dim);
-//            BlockPos blockPos = worldserver1.getSpawnPoint();
-            BlockPos blockPos = worldserver1.getTopSolidOrLiquidBlock(worldserver1.getSpawnPoint());
+            WorldServer worldServer = playerMP.getServer().worldServerForDimension(dim);
+            BlockPos blockPos = worldServer.getTopSolidOrLiquidBlock(worldServer.getSpawnPoint());
             playerMP.setPositionAndUpdate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP, dim, new VoidJumpTeleporter(playerMP.mcServer.worldServerForDimension(dim)));
-//            transferPlayerToDimension(playerMP.mcServer., playerMP, dim, new VoidJumpTeleporter(playerMP.mcServer.worldServerForDimension(dim)));
+            playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP,
+                    dim, new VoidJumpTeleporter(playerMP.mcServer.worldServerForDimension(dim)));
         }
     }
-
-    @SuppressWarnings("unchecked")
-/*    public static void transferPlayerToDimension(PlayerList playerList, EntityPlayerMP par1EntityPlayerMP, int par2, Teleporter teleporter) {
-        int j = par1EntityPlayerMP.dimension;
-        WorldServer worldserver = par1EntityPlayerMP.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-        par1EntityPlayerMP.dimension = par2;
-        WorldServer worldserver1 = par1EntityPlayerMP.getServer().worldServerForDimension(par1EntityPlayerMP.dimension);
-        par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S07PacketRespawn(par1EntityPlayerMP.dimension, par1EntityPlayerMP.worldObj.getDifficulty(), worldserver1.getWorldInfo().getTerrainType(), par1EntityPlayerMP.theItemInWorldManager.getGameType()));
-        worldserver.removePlayerEntityDangerously(par1EntityPlayerMP);
-        par1EntityPlayerMP.isDead = false;
-        playerList.transferEntityToWorld(par1EntityPlayerMP, par2, worldserver, worldserver1, teleporter);
-        playerList.preparePlayer(par1EntityPlayerMP, worldserver);
-        par1EntityPlayerMP.playerNetServerHandler.setPlayerLocation(par1EntityPlayerMP.posX, par1EntityPlayerMP.posY, par1EntityPlayerMP.posZ, par1EntityPlayerMP.rotationYaw, par1EntityPlayerMP.rotationPitch);
-        par1EntityPlayerMP.theItemInWorldManager.setWorld(worldserver1);
-        playerList.updateTimeAndWeatherForPlayer(par1EntityPlayerMP, worldserver1);
-        playerList.syncPlayerInventory(par1EntityPlayerMP);
-        for (PotionEffect potionEffect : (Collection<PotionEffect>) par1EntityPlayerMP.getActivePotionEffects()) {
-            par1EntityPlayerMP.playerNetServerHandler.sendPacket(new S1DPacketEntityEffect(par1EntityPlayerMP.getEntityId(), potionEffect));
-        }
-
-        FMLCommonHandler.instance().firePlayerChangedDimensionEvent(par1EntityPlayerMP, j, par2);
-    }*/
 
     private void spawnPortalParticle(EntityLivingBase entity, World world) {
         for (int var2 = 0; var2 < 32; ++var2) {

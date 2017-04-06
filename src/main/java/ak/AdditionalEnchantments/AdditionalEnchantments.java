@@ -1,5 +1,6 @@
 package ak.AdditionalEnchantments;
 
+import ak.AdditionalEnchantments.Enchantment.*;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -11,6 +12,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
+import static ak.AdditionalEnchantments.Constants.IMC_MESSAGE_KEY_ENCHANT_CHANGER;
+import static ak.AdditionalEnchantments.Constants.MOD_ID_ENCHANT_CHANGER;
+
 @Mod(modid = AdditionalEnchantments.MOD_ID,
         name = AdditionalEnchantments.MOD_NAME,
         version = AdditionalEnchantments.MOD_VERSION,
@@ -18,11 +22,11 @@ import net.minecraftforge.common.config.Configuration;
         useMetadata = true,
         acceptedMinecraftVersions = AdditionalEnchantments.MOD_MC_VERSION)
 public class AdditionalEnchantments {
-    public static final String MOD_ID = "AdditionalEnchantments";
+    public static final String MOD_ID = "additionalenchantments";
     public static final String MOD_NAME = "AdditionalEnchantments";
     public static final String MOD_VERSION = "@VERSION@";
-    public static final String MOD_DEPENDENCIES = "required-after:Forge@[11.14.0.1237,)";
-    public static final String MOD_MC_VERSION = "[1.9,1.10.99]";
+    public static final String MOD_DEPENDENCIES = "required-after:forge";
+    public static final String MOD_MC_VERSION = "[1.11,1.99.99]";
 
 //	@SidedProxy(clientSide = "ClientProxy", serverSide = "CommonProxy")
 //	public static CommonProxy proxy;
@@ -30,23 +34,18 @@ public class AdditionalEnchantments {
     public static Enchantment vorpal;
     public static boolean addVorpal;
     public static int idVorpal;
-    public static final String NAME_VORPAL = "vorpal";
     public static Enchantment disjunction;
     public static boolean addDisjunction;
     public static int idDisjunction;
-    public static final String NAME_DISJUNCTION = "disjunction";
     public static Enchantment waterAspect;
     public static boolean addWaterAspect;
     public static int idWaterAspect;
-    public static final String NAME_WATER_ASPECT = "water_aspect";
     public static Enchantment magicProtection;
     public static boolean addMagicProtection;
     public static int idMagicProtection;
-    public static final String NAME_MAGIC_PROTECTION = "magic_protection";
     public static Enchantment voidJump;
     public static boolean addVoidJump;
     public static int idVoidJump;
-    public static final String NAME_VOID_JUMP = "void_jump";
 
     public static final EntityEquipmentSlot[] SLOTS_MAIN_HAND = new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND};
     public static final EntityEquipmentSlot[] SLOTS_PROTECTS = new EntityEquipmentSlot[]{
@@ -105,10 +104,10 @@ public class AdditionalEnchantments {
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
         nbtTagCompound.setInteger("enchantId", enchantId);
         nbtTagCompound.setInteger("materiaTexId", texId);
-        FMLInterModComms.sendMessage("EnchantChanger", "registerExtraMateria", nbtTagCompound);
+        FMLInterModComms.sendMessage(MOD_ID_ENCHANT_CHANGER, IMC_MESSAGE_KEY_ENCHANT_CHANGER, nbtTagCompound);
     }
 
     public static ResourceLocation getResourceLocation(String name) {
-        return new ResourceLocation(AdditionalEnchantments.MOD_ID + ":" + name);
+        return new ResourceLocation(AdditionalEnchantments.MOD_ID, name);
     }
 }
