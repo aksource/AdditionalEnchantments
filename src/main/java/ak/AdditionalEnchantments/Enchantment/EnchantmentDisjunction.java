@@ -20,7 +20,7 @@ public class EnchantmentDisjunction extends EnchantmentDamagable {
     public void onLivingHurt(LivingHurtEvent event) {
         EntityLivingBase entityLivingBase = event.getEntityLiving();
         if (entityLivingBase instanceof EntityEnderman && event.getSource().damageType.equals("player")) {
-            ItemStack itemStack = ((EntityPlayer) event.getSource().getEntity()).getHeldItemMainhand();
+            ItemStack itemStack = ((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand();
             if (!itemStack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.disjunction, itemStack) > 0) {
                 event.setAmount(event.getAmount() +  EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.disjunction, itemStack) * 2.5F);
             }

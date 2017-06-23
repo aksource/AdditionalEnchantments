@@ -59,11 +59,11 @@ public class VoidJumpEventHook {
     public void transferToDimension(int dim, EntityLivingBase entity) {
         if (entity instanceof EntityPlayerMP && entity.getServer() != null) {
             EntityPlayerMP playerMP = (EntityPlayerMP) entity;
-            WorldServer worldServer = playerMP.getServer().worldServerForDimension(dim);
+            WorldServer worldServer = playerMP.getServer().getWorld(dim);
             BlockPos blockPos = worldServer.getTopSolidOrLiquidBlock(worldServer.getSpawnPoint());
             playerMP.setPositionAndUpdate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP,
-                    dim, new VoidJumpTeleporter(playerMP.mcServer.worldServerForDimension(dim)));
+                    dim, new VoidJumpTeleporter(playerMP.mcServer.getWorld(dim)));
         }
     }
 

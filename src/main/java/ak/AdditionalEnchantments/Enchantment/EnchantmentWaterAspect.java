@@ -19,7 +19,7 @@ public class EnchantmentWaterAspect extends EnchantmentDamagable {
     public void onLivingHurt(LivingHurtEvent event) {
         EntityLivingBase entityLivingBase = event.getEntityLiving();
         if (entityLivingBase.isImmuneToFire() && event.getSource().damageType.equals("player")) {
-            ItemStack itemStack = ((EntityPlayer) event.getSource().getEntity()).getHeldItemMainhand();
+            ItemStack itemStack = ((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand();
             if (!itemStack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.waterAspect, itemStack) > 0) {
                 event.setAmount(event.getAmount() +  EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.waterAspect, itemStack) * 2.5F);
             }

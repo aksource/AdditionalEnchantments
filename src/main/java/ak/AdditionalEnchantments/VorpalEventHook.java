@@ -27,8 +27,8 @@ public class VorpalEventHook {
     @SubscribeEvent
     public void vorpalHurtEvent(LivingHurtEvent event) {
         if (!AdditionalEnchantments.addVorpal) return;
-        if (event.getEntityLiving().isNonBoss() && event.getSource().getEntity() instanceof EntityLivingBase && event.getSource().getSourceOfDamage() instanceof EntityLivingBase) {
-            EntityLivingBase attacker = (EntityLivingBase) event.getSource().getEntity();
+        if (event.getEntityLiving().isNonBoss() && event.getSource().getTrueSource() instanceof EntityLivingBase && event.getSource().getImmediateSource() instanceof EntityLivingBase) {
+            EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
             ItemStack heldItem = attacker.getHeldItem(EnumHand.MAIN_HAND);
             if (!heldItem.isEmpty() && EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.vorpal, heldItem) > 0) {
                 EntityLivingBase target = event.getEntityLiving();
@@ -45,8 +45,8 @@ public class VorpalEventHook {
 
     @SubscribeEvent
     public void entityDropEvent(LivingDropsEvent event) {
-        if (AdditionalEnchantments.addVorpal && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof EntityLivingBase) {
-            EntityLivingBase attacker = (EntityLivingBase) event.getSource().getEntity();
+        if (AdditionalEnchantments.addVorpal && event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof EntityLivingBase) {
+            EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
             ItemStack equipItem = attacker.getHeldItem(EnumHand.MAIN_HAND);
             int vorpalLv = EnchantmentHelper.getEnchantmentLevel(AdditionalEnchantments.vorpal, equipItem);
             if ((vorpaled || vorpalLv * 10 > rand.nextInt(100)) && !skullInDrops(event.getDrops())) {
@@ -54,7 +54,7 @@ public class VorpalEventHook {
                 if (skullmeta >= 0) {
                     ItemStack skull = new ItemStack(Items.SKULL, 1, skullmeta);
                     EntityItem entityitem = new EntityItem(event.getEntityLiving().getEntityWorld(), event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ);
-                    entityitem.setEntityItemStack(skull);
+                    entityitem.setItem(skull);
                     event.getDrops().add(entityitem);
                     vorpaled = false;
                 }
@@ -83,7 +83,7 @@ public class VorpalEventHook {
 
     private boolean skullInDrops(List<EntityItem> droplist) {
         for (EntityItem entityItem : droplist) {
-            if (entityItem.getEntityItem().getItem() instanceof ItemSkull)
+            if (entityItem.getItem().getItem() instanceof ItemSkull)
                 return true;
         }
         return false;
