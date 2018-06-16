@@ -11,8 +11,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import static ak.AdditionalEnchantments.Constants.NAME_WATER_ASPECT;
 
 public class EnchantmentWaterAspect extends EnchantmentDamagable {
-    public EnchantmentWaterAspect(int id, Rarity rarity) {
-        super(id, AdditionalEnchantments.getResourceLocation(NAME_WATER_ASPECT), rarity);
+    public EnchantmentWaterAspect(Rarity rarity) {
+        super(rarity);
+        setRegistryName(NAME_WATER_ASPECT);
     }
 
     @SubscribeEvent

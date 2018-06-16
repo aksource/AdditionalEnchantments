@@ -1,16 +1,15 @@
 package ak.AdditionalEnchantments.Enchantment;
 
-import ak.AdditionalEnchantments.AdditionalEnchantments;
-import ak.AdditionalEnchantments.Constants;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 
 import static ak.AdditionalEnchantments.AdditionalEnchantments.SLOTS_MAIN_HAND;
+import static ak.AdditionalEnchantments.Constants.NAME_VORPAL;
 
 public class EnchantmentVorpal extends Enchantment {
-    public EnchantmentVorpal(int id, Enchantment.Rarity rarity) {
+    public EnchantmentVorpal(Enchantment.Rarity rarity) {
         super(rarity, EnumEnchantmentType.WEAPON, SLOTS_MAIN_HAND);
-        Enchantment.REGISTRY.register(id, AdditionalEnchantments.getResourceLocation(Constants.NAME_VORPAL), this);
+        setRegistryName(NAME_VORPAL);
     }
 
     public int getMaxLevel() {

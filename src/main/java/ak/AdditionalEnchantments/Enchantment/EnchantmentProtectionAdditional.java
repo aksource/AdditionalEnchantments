@@ -3,14 +3,12 @@ package ak.AdditionalEnchantments.Enchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.util.ResourceLocation;
 
 import static ak.AdditionalEnchantments.AdditionalEnchantments.SLOTS_MAIN_HAND;
 
 public class EnchantmentProtectionAdditional extends Enchantment {
-    public EnchantmentProtectionAdditional(int id, ResourceLocation resourceLocation, Rarity rarity) {
+    public EnchantmentProtectionAdditional(Rarity rarity) {
         super(rarity, EnumEnchantmentType.ARMOR, SLOTS_MAIN_HAND);
-        Enchantment.REGISTRY.register(id, resourceLocation, this);
     }
 
     public int getMaxLevel() {

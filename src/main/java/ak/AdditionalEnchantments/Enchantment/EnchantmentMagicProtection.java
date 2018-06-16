@@ -1,14 +1,14 @@
 package ak.AdditionalEnchantments.Enchantment;
 
-import ak.AdditionalEnchantments.AdditionalEnchantments;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 
 import static ak.AdditionalEnchantments.Constants.NAME_MAGIC_PROTECTION;
 
 public class EnchantmentMagicProtection extends EnchantmentProtectionAdditional {
-    public EnchantmentMagicProtection(int id, Rarity rarity) {
-        super(id, AdditionalEnchantments.getResourceLocation(NAME_MAGIC_PROTECTION), rarity);
+    public EnchantmentMagicProtection(Rarity rarity) {
+        super(rarity);
+        setRegistryName(NAME_MAGIC_PROTECTION);
     }
 
     @Override

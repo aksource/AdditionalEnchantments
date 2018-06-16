@@ -3,14 +3,12 @@ package ak.AdditionalEnchantments.Enchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentDamage;
 import net.minecraft.enchantment.EnumEnchantmentType;
-import net.minecraft.util.ResourceLocation;
 
 import static ak.AdditionalEnchantments.AdditionalEnchantments.SLOTS_MAIN_HAND;
 
 public class EnchantmentDamagable extends Enchantment {
-    public EnchantmentDamagable(int id, ResourceLocation resourceLocation, Rarity rarity) {
+    public EnchantmentDamagable(Rarity rarity) {
         super(rarity, EnumEnchantmentType.WEAPON, SLOTS_MAIN_HAND);
-        Enchantment.REGISTRY.register(id, resourceLocation, this);
     }
 
     public int getMaxLevel() {

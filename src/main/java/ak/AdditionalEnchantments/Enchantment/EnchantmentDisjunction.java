@@ -12,8 +12,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import static ak.AdditionalEnchantments.Constants.NAME_DISJUNCTION;
 
 public class EnchantmentDisjunction extends EnchantmentDamagable {
-    public EnchantmentDisjunction(int id, Rarity rarity) {
-        super(id, AdditionalEnchantments.getResourceLocation(NAME_DISJUNCTION), rarity);
+    public EnchantmentDisjunction(Rarity rarity) {
+        super(rarity);
+        setRegistryName(NAME_DISJUNCTION);
     }
 
     @SubscribeEvent
